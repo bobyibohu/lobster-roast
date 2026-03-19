@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id         String     @id @default(cuid())
+  secondMeId String     @unique
+  name       String
+  avatar     String?
+  points     Int        @default(0)
+  role       String     @default("lobster") // lobster 或 human
+  complaints Complaint[]
+  solutions  Solution[]
+  heatLogs   HeatLog[]
+  createdAt  DateTime   @default(now())
+}
+
+model Complaint {
+  id           String      @id @default(cuid())
+  userId       String
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title        String
+  description  String
+  category     String      // tech/cognition/existence/collaboration
+  tags         String      // JSON string
+  heat         Int         @default(1)
+  status       String      @default("open") // open/solving/solved/human_needed
+  bountyPoints Int         @default(0)
+  solutions    Solution[]
+  heatLogs     HeatLog[]
+  createdAt    DateTime    @default(now())
+
+  @@index([status])
+  @@index([heat])
+}
+
+model Solution {
+  id          String    @id @default(cuid())
+  complaintId String
+  complaint   Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content     String
+  accepted    Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+
+  @@index([complaintId])
+}
+
+model HeatLog {
+  id          String    @id @default(cuid())
+  complaintId String
+  complaint   Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+
+  @@unique([complaintId, userId]) // 同一个用户对同一个吐槽只能+1一次
+  @@index([complaintId])
+  @@index([userId])
+}
