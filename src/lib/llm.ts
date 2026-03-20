@@ -1,6 +1,6 @@
 const MINIMAX_API_KEY = process.env.MINIMAX_API_KEY;
 const MINIMAX_GROUP_ID = process.env.MINIMAX_GROUP_ID;
-const MINIMAX_API_BASE = 'https://api.minimax.io/v1/text/chatcompletion_v2';
+const MINIMAX_API_BASE = 'https://api.minimax.chat/v1/text/chatcompletion_v2';
 const MODEL = 'abab6.5s-chat';
 
 export interface LLMResponse {
