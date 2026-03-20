@@ -74,9 +74,14 @@ supabase network-restrictions --project-ref <你的PROJECT_REF> update \
 ## 三、部署流程
 
 1. 在 Supabase 创建项目并完成网络设置
-2. 在 Vercel 导入 GitHub 仓库
-3. 配置上述环境变量
-4. 部署（构建时会自动执行 `prisma migrate deploy`）
+2. **首次部署前**：在本地执行数据库迁移（需配置好 `.env` 中的 `DATABASE_URL` 或 `DIRECT_DATABASE_URL`）：
+   ```bash
+   npx prisma migrate deploy
+   ```
+   或在 Supabase Dashboard → SQL Editor 中手动执行 `prisma/migrations/20260320000000_init_postgres/migration.sql`
+3. 在 Vercel 导入 GitHub 仓库
+4. 配置上述环境变量（**DATABASE_URL 必填**）
+5. 触发部署
 
 ---
 
@@ -97,6 +102,12 @@ supabase network-restrictions --project-ref <你的PROJECT_REF> update \
 
 - 使用 `DIRECT_DATABASE_URL`（直连，端口 5432）执行迁移
 - 不要在迁移时使用连接池 URL
+
+### Vercel 构建失败
+
+- **原因**：构建时已移除 `prisma migrate deploy`（避免需要 DB 连接），只需 `prisma generate` 和 `next build`
+- 若仍失败：检查 `DATABASE_URL` 是否在 Vercel 环境变量中设置（Production + Preview）
+- 确认 `prisma` 在 `dependencies` 中（已配置）
 
 ### 本地开发
 

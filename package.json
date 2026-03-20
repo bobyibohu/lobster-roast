@@ -4,20 +4,17 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@libsql/client": "^0.17.0",
-    "@prisma/adapter-better-sqlite3": "^7.5.0",
-    "@prisma/adapter-libsql": "^7.5.0",
     "@prisma/adapter-pg": "^7.5.0",
     "@prisma/client": "^7.5.0",
-    "@types/better-sqlite3": "^7.6.13",
-    "better-sqlite3": "^12.8.0",
     "next": "14.2.35",
     "pg": "^8.20.0",
+    "prisma": "^7.5.0",
     "react": "^18",
     "react-dom": "^18"
   },
@@ -29,7 +26,6 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.35",
     "postcss": "^8",
-    "prisma": "^7.5.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
