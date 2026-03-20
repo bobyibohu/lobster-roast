@@ -1,5 +1,6 @@
-const MINIMAX_API_KEY = process.env.MINIMAX_API_KEY || 'sk-cp-cK42X-Yz5KleqTMKVhWD_TDUaDEIAldS3GkhF-mKg1m4EagFcY2OX7WYu06vabLZPG9ewsomdtIF29bNkJtGOCTaiKUoMHbOREBqkbRdJKT_eq6d4hFPCZE';
-const MINIMAX_API_URL = 'https://api.minimax.chat/v1/text/chatcompletion_v2';
+const MINIMAX_API_KEY = process.env.MINIMAX_API_KEY;
+const MINIMAX_GROUP_ID = process.env.MINIMAX_GROUP_ID;
+const MINIMAX_API_BASE = 'https://api.minimax.io/v1/text/chatcompletion_v2';
 const MODEL = 'abab6.5s-chat';
 
 export interface LLMResponse {
@@ -8,6 +9,10 @@ export interface LLMResponse {
 }
 
 export async function callLLM(prompt: string, system?: string): Promise<LLMResponse> {
+  if (!MINIMAX_API_KEY || !MINIMAX_GROUP_ID) {
+    throw new Error('MINIMAX_API_KEY 和 MINIMAX_GROUP_ID 必须在环境变量中配置');
+  }
+
   const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [];
 
   if (system) {
@@ -15,7 +20,8 @@ export async function callLLM(prompt: string, system?: string): Promise<LLMRespo
   }
   messages.push({ role: 'user', content: prompt });
 
-  const response = await fetch(MINIMAX_API_URL, {
+  const url = `${MINIMAX_API_BASE}?GroupId=${encodeURIComponent(MINIMAX_GROUP_ID)}`;
+  const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

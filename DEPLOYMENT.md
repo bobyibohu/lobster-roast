@@ -68,6 +68,7 @@ supabase network-restrictions --project-ref <你的PROJECT_REF> update \
 | `SECOND_ME_CLIENT_SECRET` | 你的 Client Secret | Production |
 | `SECOND_ME_REDIRECT_URI` | `https://你的项目.vercel.app/api/auth/callback` | Production |
 | `MINIMAX_API_KEY` | 你的 MiniMax API Key | Production |
+| `MINIMAX_GROUP_ID` | 你的 MiniMax Group ID（账户管理 → 基本信息） | Production |
 
 ---
 
